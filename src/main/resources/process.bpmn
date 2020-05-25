@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_18nti22" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.7.0">
+  <bpmn:process id="KafkaDemo" name="Kafka Demo" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="Start Process with Kafka Stream">
+      <bpmn:outgoing>Flow_0uujq8q</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0czvh0v" messageRef="Message_1maa6ei" />
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_0uujq8q" sourceRef="StartEvent_1" targetRef="Activity_0zhduij" />
+    <bpmn:userTask id="Activity_0zhduij" name="User Task" camunda:formKey="embedded:app:forms/form.html">
+      <bpmn:incoming>Flow_0uujq8q</bpmn:incoming>
+      <bpmn:outgoing>Flow_1pvgdzn</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_1pvgdzn" sourceRef="Activity_0zhduij" targetRef="Event_0ktss6c" />
+    <bpmn:sequenceFlow id="Flow_0r4rs2a" sourceRef="Event_0ktss6c" targetRef="Activity_0tcd2jw" />
+    <bpmn:intermediateCatchEvent id="Event_0ktss6c" name="Intermediate Message">
+      <bpmn:incoming>Flow_1pvgdzn</bpmn:incoming>
+      <bpmn:outgoing>Flow_0r4rs2a</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1d5h7r0" messageRef="Message_1jt4yci" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_0ehw2mw" sourceRef="Activity_0tcd2jw" targetRef="Event_1utedw3" />
+    <bpmn:serviceTask id="Activity_0tcd2jw" name="Publish Result Message" camunda:class="org.camunda.bpm.demo.delegate.MessageDelegate">
+      <bpmn:incoming>Flow_0r4rs2a</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ehw2mw</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:boundaryEvent id="Event_00ct15b" name="Boundary Message" attachedToRef="Activity_0zhduij">
+      <bpmn:outgoing>Flow_001jkdt</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_14jo3i9" messageRef="Message_119r48s" />
+    </bpmn:boundaryEvent>
+    <bpmn:sequenceFlow id="Flow_001jkdt" sourceRef="Event_00ct15b" targetRef="Activity_01v8wfy" />
+    <bpmn:endEvent id="Event_1qay9h8">
+      <bpmn:incoming>Flow_01dhixo</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_01dhixo" sourceRef="Activity_01v8wfy" targetRef="Event_1qay9h8" />
+    <bpmn:serviceTask id="Activity_01v8wfy" name="Some Task" camunda:type="external" camunda:topic="external-task">
+      <bpmn:incoming>Flow_001jkdt</bpmn:incoming>
+      <bpmn:outgoing>Flow_01dhixo</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_1utedw3">
+      <bpmn:incoming>Flow_0ehw2mw</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:subProcess id="Activity_0jk6t47" triggeredByEvent="true">
+      <bpmn:startEvent id="Event_1pxuxf9" name="Event Subprocess Message" isInterrupting="false">
+        <bpmn:outgoing>Flow_13kojmo</bpmn:outgoing>
+        <bpmn:messageEventDefinition id="MessageEventDefinition_0uigxu9" messageRef="Message_1ri61gt" />
+      </bpmn:startEvent>
+      <bpmn:sequenceFlow id="Flow_13kojmo" sourceRef="Event_1pxuxf9" targetRef="Activity_0auuzip" />
+      <bpmn:endEvent id="Event_0w2clca">
+        <bpmn:incoming>Flow_08sj9w7</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_08sj9w7" sourceRef="Activity_0auuzip" targetRef="Event_0w2clca" />
+      <bpmn:serviceTask id="Activity_0auuzip" name="Some Task" camunda:class="org.camunda.bpm.demo.delegate.MessageDelegate">
+        <bpmn:incoming>Flow_13kojmo</bpmn:incoming>
+        <bpmn:outgoing>Flow_08sj9w7</bpmn:outgoing>
+      </bpmn:serviceTask>
+    </bpmn:subProcess>
+  </bpmn:process>
+  <bpmn:message id="Message_1maa6ei" name="MessageKafkaDemo" />
+  <bpmn:message id="Message_119r48s" name="MessageBoundary" />
+  <bpmn:message id="Message_1jt4yci" name="MessageIntermediate" />
+  <bpmn:message id="Message_1ri61gt" name="MessageEventSubprocess" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="KafkaDemo">
+      <bpmndi:BPMNShape id="Event_1k72vkq_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="212" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="185" y="142" width="90" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0uujq8q_di" bpmnElement="Flow_0uujq8q">
+        <di:waypoint x="248" y="117" />
+        <di:waypoint x="320" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_0gcoy3n_di" bpmnElement="Activity_0zhduij">
+        <dc:Bounds x="320" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1pvgdzn_di" bpmnElement="Flow_1pvgdzn">
+        <di:waypoint x="420" y="117" />
+        <di:waypoint x="472" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0r4rs2a_di" bpmnElement="Flow_0r4rs2a">
+        <di:waypoint x="508" y="117" />
+        <di:waypoint x="560" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_0tkejea_di" bpmnElement="Event_0ktss6c">
+        <dc:Bounds x="472" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="459" y="142" width="62" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0ehw2mw_di" bpmnElement="Flow_0ehw2mw">
+        <di:waypoint x="660" y="117" />
+        <di:waypoint x="722" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_12p7lwv_di" bpmnElement="Activity_0tcd2jw">
+        <dc:Bounds x="560" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0s870hf_di" bpmnElement="Event_00ct15b">
+        <dc:Bounds x="362" y="139" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="356" y="182" width="48" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_001jkdt_di" bpmnElement="Flow_001jkdt">
+        <di:waypoint x="380" y="175" />
+        <di:waypoint x="380" y="240" />
+        <di:waypoint x="450" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_1qay9h8_di" bpmnElement="Event_1qay9h8">
+        <dc:Bounds x="602" y="222" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_01dhixo_di" bpmnElement="Flow_01dhixo">
+        <di:waypoint x="550" y="240" />
+        <di:waypoint x="602" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_1iqzz9o_di" bpmnElement="Activity_01v8wfy">
+        <dc:Bounds x="450" y="200" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1rhldct_di" bpmnElement="Event_1utedw3">
+        <dc:Bounds x="722" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0a2yfou_di" bpmnElement="Activity_0jk6t47" isExpanded="true">
+        <dc:Bounds x="160" y="340" width="350" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1u7wnnq_di" bpmnElement="Event_1pxuxf9">
+        <dc:Bounds x="200" y="422" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="189" y="465" width="59" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_13kojmo_di" bpmnElement="Flow_13kojmo">
+        <di:waypoint x="236" y="440" />
+        <di:waypoint x="290" y="440" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Event_0w2clca_di" bpmnElement="Event_0w2clca">
+        <dc:Bounds x="452" y="422" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_08sj9w7_di" bpmnElement="Flow_08sj9w7">
+        <di:waypoint x="390" y="440" />
+        <di:waypoint x="452" y="440" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_01fom3a_di" bpmnElement="Activity_0auuzip">
+        <dc:Bounds x="290" y="400" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
